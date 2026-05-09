@@ -7,6 +7,207 @@
     <title>Karachi — The City of Lights</title>
 
 
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: "Times New Roman", Times, serif;
+            background: #2b2b2b;
+            color: #fff;
+            line-height: 1.7;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+            border-radius: 8px
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 0 20px
+        }
+
+        /* HEADER */
+        header {
+            background: #111;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+        }
+
+        header .inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header .logo {
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        header nav ul {
+            display: flex;
+            gap: 25px
+        }
+
+        header nav ul li a:hover {
+            color: #ccc
+        }
+
+        /* HERO */
+        .hero {
+            height: 100vh;
+            background:
+                linear-gradient(rgba(0, 0, 0, .75), rgba(0, 0, 0, .75)),
+                url("../Images/Karachi/karachi_bg.jfif");
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+            padding-top: 80px;
+        }
+
+        hero h1 {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            max-width: 800px;
+            margin-bottom: 40px;
+        }
+
+
+        /* SECTIONS */
+        section {
+            padding: 80px 0
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 38px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .underline {
+            width: 100px;
+            height: 4px;
+            background: #fff;
+            margin: 12px auto 40px;
+        }
+
+        /* GRID */
+        .grid {
+            display: grid;
+            gap: 30px
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))
+        }
+
+        /* CARD */
+        .card {
+            background: #1f1f1f;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, .5);
+        }
+
+        .card h3 {
+            margin-bottom: 12px;
+            color: #e2e2e2
+        }
+
+        /* ICON LIST */
+        .icon-list li {
+            margin-bottom: 10px;
+            list-style: none;
+        }
+
+        .icon-list li i {
+            color: #ffcc00;
+            margin-right: 10px
+        }
+
+        /* WEATHER */
+        .weather-box {
+            background: #141414;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, .7);
+        }
+
+        .weather-box h3 {
+            font-size: 24px;
+            margin-bottom: 10px
+        }
+
+        .weather-temp {
+            font-size: 46px;
+            font-weight: 700;
+            margin: 10px 0;
+            color: #ffdd57
+        }
+
+        /* BUTTON */
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #000;
+            color: #fff;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: .3s;
+        }
+
+        .btn:hover {
+            background: #333
+        }
+
+        /* FOOTER */
+        footer {
+            background: #111;
+            color: #ccc;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        footer a:hover {
+            color: #fff
+        }
+
+        /* RESPONSIVE */
+        @media(max-width:768px) {
+            .hero h1 {
+                font-size: 40px
+            }
+
+            header nav ul {
+                flex-direction: column;
+                gap: 15px
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -40,7 +241,7 @@
         <div class="container">
             <h2 class="section-title">History & Culture</h2>
             <div class="underline"></div>
-            <p style="text-align:center;max-width:800px;margin:auto;color:#000000;">
+            <p style="text-align:center;max-width:800px;margin:auto;color:#ddd;">
                 Karachi, Pakistan’s largest city and economic heart, has a rich history
                 stretching back to ancient times. It has been ruled by many civilizations,
                 including the Mauryans, Arabs, and British, forming a unique cultural blend
@@ -58,7 +259,7 @@
             <div class="grid grid-2">
 
                 <div class="card">
-                    <img src="../Images/karachi_Clifton_Beach.jfif">
+                    <img src="../Images/Karachi/karachi_Clifton_Beach.jfif">
                     <h3>Clifton Beach</h3>
                     <p>Karachi's Clifton Beach, also known as Sea View, is Pakistan's most famous and lively seaside
                         spot, stretching along the Arabian Sea and bustling with locals enjoying camel/horse rides,
@@ -68,7 +269,7 @@
                 </div>
 
                 <div class="card">
-                    <img src="../Images/karachi_mazarequaid.jfif">
+                    <img src="../Images/Karachi/karachi_mazarequaid.jfif">
                     <h3>Quaid-e-Azam Mausoleum</h3>
                     <p>Mazar-e-Quaid, also known as Jinnah Mausoleum or the National Mausoleum, is the final resting
                         place of Muhammad Ali Jinnah, the founder of Pakistan. Designed in a 1960s modernist style, it
@@ -78,7 +279,7 @@
                 </div>
 
                 <div class="card">
-                    <img src="../Images/karachi_mohatta.jfif">
+                    <img src="../Images/Karachi/karachi_mohatta.jfif">
                     <h3>Mohatta Palace</h3>
                     <p>Mohatta Palace is a museum of the fine and decorative arts of Pakistan and its collections
                         permanent or temporary, reflect Pakistan's artistic traditions in stone, metal, clay, wood,
@@ -100,7 +301,7 @@
             <div class="grid grid-2">
 
                 <div class="card">
-                    <img src="..\Images\food_briyani.jpg">
+                    <img src="..\Images\Karachi\food_briyani.jpg">
                     <h3>Karachi Biryani</h3>
                     <p>Karachi Biryani is a popular, spicy, and masala-rich Pakistani rice dish known for its flavorful
                         layering of tender meat (chicken, beef, or mutton), long-grain basmati rice, potatoes, fried
@@ -110,7 +311,7 @@
                 </div>
 
                 <div class="card">
-                    <img src="..\Images\karachi_nihari_.jfif">
+                    <img src="..\Images\Karachi\karachi_nihari_.jfif">
                     <h3>Nihari</h3>
                     <p>Karachi Nihari is a rich, spicy, slow-cooked meat stew (beef, mutton, or chicken) featuring bone
                         marrow, thickened with flour, and flavored with aromatic spices like long pepper, traditionally
@@ -120,7 +321,7 @@
                 </div>
 
                 <div class="card">
-                    <img src="../Images/karachi_bbq.jfif">
+                    <img src="../Images/Karachi/karachi_bbq.jfif">
                     <h3>Karachi BBQ</h3>
                     <p>Karachi BBQ is known for its vibrant, spicy, and smoky Pakistani grilled meats, featuring tender
                         marinated chicken (tikka, malai boti, bihari) and beef, often served with fresh naan, tangy
@@ -156,7 +357,7 @@
             <div class="underline"></div>
             <div class="weather-box">
 
-                <ul class="icon-list" style="max-width:800px;margin:auto;color:#000000;">
+                <ul class="icon-list" style="max-width:800px;margin:auto;color:#ddd;">
                     <li><i class="fas fa-map-signs"></i>Always carry a city map or offline guide.</li>
                     <li><i class="fas fa-sun"></i>Karachi gets hot — wear sunscreen and keep hydrated.</li>
                     <li><i class="fas fa-car-crash"></i>Use registered transport and follow traffic signals.</li>
