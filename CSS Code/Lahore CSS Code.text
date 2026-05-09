@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lahore — Heart of Pakistan</title>
+
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- CSS File -->
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+<div class="container inner">
+    <div class="logo">
+        <i class="fas fa-map-marker-alt"></i> Gastrévia
+    </div>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#history">History</a></li>
+            <li><a href="#places">Places</a></li>
+            <li><a href="#food">Food</a></li>
+            <li><a href="#weather">Weather</a></li>
+            <li><a href="#tips">Precautions</a></li>
+        </ul>
+    </nav>
+</div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+    <div>
+        <h1>Lahore</h1>
+        <p>The Heart of Pakistan • City of Gardens</p>
+        <a href="#places" class="btn">Explore More</a>
+    </div>
+</section>
+
+<!-- HISTORY -->
+<section id="history">
+<div class="container">
+
+    <h2 class="section-title">History & Culture</h2>
+    <div class="underline"></div>
+
+    <p class="history-text">
+        Lahore is one of South Asia’s oldest cities, renowned for its Mughal-era
+        architecture, rich traditions, poetry, music, and vibrant food culture.
+        It served as a major capital during the Mughal Empire and remains Pakistan’s
+        cultural and artistic hub.
+    </p>
+
+</div>
+</section>
+
+<!-- TOURIST PLACES -->
+<section id="places">
+<div class="container">
+
+    <h2 class="section-title">Top Tourist Places</h2>
+    <div class="underline"></div>
+
+    <div class="grid grid-2">
+
+        <div class="card">
+            <img src="images/badshahi.jpg" alt="Badshahi Mosque">
+
+            <h3>Badshahi Mosque</h3>
+
+            <p>
+                One of the largest mosques in the world,
+                an architectural masterpiece from the Mughal era.
+            </p>
+        </div>
+
+        <div class="card">
+            <img src="images/lahore-fort.jpg" alt="Lahore Fort">
+
+            <h3>Lahore Fort</h3>
+
+            <p>
+                A UNESCO World Heritage Site showcasing royal palaces,
+                halls, and Mughal artistry.
+            </p>
+        </div>
+
+        <div class="card">
+            <img src="images/shalimar.jpg" alt="Shalimar Gardens">
+
+            <h3>Shalimar Gardens</h3>
+
+            <p>
+                Beautiful terraced gardens built by Emperor Shah Jahan,
+                perfect for evening walks.
+            </p>
+        </div>
+
+        <div class="card">
+            <img src="images/minar.jpg" alt="Minar-e-Pakistan">
+
+            <h3>Minar-e-Pakistan</h3>
+
+            <p>
+                A national monument symbolizing the birth of Pakistan,
+                surrounded by lush parks.
+            </p>
+        </div>
+
+    </div>
+</div>
+</section>
+
+<!-- FOOD -->
+<section id="food">
+<div class="container">
+
+    <h2 class="section-title">Famous Foods of Lahore</h2>
+    <div class="underline"></div>
+
+    <div class="grid grid-2">
+
+        <div class="card">
+            <img src="images/payee.jpg" alt="Payee">
+
+            <h3>Payee</h3>
+
+            <p>
+                A rich traditional breakfast dish slow-cooked overnight,
+                loved across Lahore.
+            </p>
+        </div>
+
+        <div class="card">
+            <img src="images/halwa-puri.jpg" alt="Halwa Puri">
+
+            <h3>Halwa Puri</h3>
+
+            <p>
+                A classic Lahori breakfast served with chana and sweet halwa.
+            </p>
+        </div>
+
+        <div class="card">
+            <img src="images/bbq.jpg" alt="Lahori BBQ">
+
+            <h3>Lahori BBQ</h3>
+
+            <p>
+                Spicy grilled chicken, kebabs, and tikka —
+                a night-time street food favorite.
+            </p>
+        </div>
+
+        <div class="card">
+            <img src="images/falooda.jpg" alt="Falooda">
+
+            <h3>Falooda</h3>
+
+            <p>
+                A refreshing dessert made with milk, vermicelli,
+                ice cream, and rose syrup.
+            </p>
+        </div>
+
+    </div>
+</div>
+</section>
+
+<!-- WEATHER -->
+<section id="weather">
+<div class="container">
+
+    <h2 class="section-title">Weather in Lahore</h2>
+    <div class="underline"></div>
+
+    <div class="weather-box">
+
+        <h3>Lahore Weather Overview</h3>
+
+        <p class="weather-temp">32°C</p>
+
+        <p>Hot Summers • Mild Winters • Monsoon Rains</p>
+
+        <small>
+            (Live weather can be added using OpenWeather API)
+        </small>
+
+    </div>
+
+</div>
+</section>
+
+<!-- PRECAUTIONS -->
+<section id="tips">
+<div class="container">
+
+    <h2 class="section-title">Visitor Precautions</h2>
+    <div class="underline"></div>
+
+    <ul class="icon-list">
+
+        <li>
+            <i class="fas fa-sun"></i>
+            Summers are hot — wear light clothing and stay hydrated.
+        </li>
+
+        <li>
+            <i class="fas fa-mask"></i>
+            Air pollution can be high — carry a mask if needed.
+        </li>
+
+        <li>
+            <i class="fas fa-shoe-prints"></i>
+            Wear comfortable shoes for historical site visits.
+        </li>
+
+        <li>
+            <i class="fas fa-car"></i>
+            Traffic can be heavy — plan travel times wisely.
+        </li>
+
+        <li>
+            <i class="fas fa-hand-holding-water"></i>
+            Drink bottled water only.
+        </li>
+
+    </ul>
+
+</div>
+</section>
+
+<footer>
+    <p>© 2026 Gastrévia — Explore Lahore. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
