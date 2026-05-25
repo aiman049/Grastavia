@@ -288,6 +288,23 @@ nav ul{flex-direction:column}
 </head>
 
 <body>
+<div class="chatbot-container">
+
+    <h2>PakGuide AI</h2>
+
+    <input
+        type="text"
+        id="userInput"
+        placeholder="Ask about Pakistan tourism..."
+    >
+
+    <button onclick="sendMessage()">
+        Send
+    </button>
+
+    <div id="response"></div>
+
+</div>
 
 
     <!-- Header -->
@@ -338,8 +355,7 @@ nav ul{flex-direction:column}
                 </div>
             </div>
         </div>
-    </section>
-
+    </section
     <!-- Destinations -->
     <section class="destinations" id="destinations">
         <div class="container">
@@ -529,6 +545,6 @@ nav ul{flex-direction:column}
             </div>
         </div>
     </footer>
-
+<script src="ai.js"></script>
 </body>
 </html>
