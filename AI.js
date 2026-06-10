@@ -1,5 +1,5 @@
 // Grastavia AI Travel Assistant - NO API KEY REQUIRED!
-// Complete working AI chatbot for Pakistan tourism
+// Expanded with budget-based destination recommendations
 
 // Create floating chat widget when page loads
 document.addEventListener('DOMContentLoaded', () => {
@@ -14,7 +14,7 @@ function createAIChatWidget() {
             <button id="chat-toggle-btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 50px; padding: 15px 25px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); font-size: 16px; font-weight: bold; transition: all 0.3s ease;">
                 🤖 AI Travel Assistant
             </button>
-            <div id="chat-container" style="display: none; position: absolute; bottom: 70px; right: 0; width: 350px; height: 500px; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); overflow: hidden; flex-direction: column;">
+            <div id="chat-container" style="display: none; position: absolute; bottom: 70px; right: 0; width: 380px; height: 550px; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); overflow: hidden; flex-direction: column;">
                 <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <strong>🤖 Grastavia AI Guide</strong>
@@ -25,15 +25,16 @@ function createAIChatWidget() {
                 <div id="chat-messages" style="flex: 1; overflow-y: auto; padding: 15px; background: #f8f9fa;">
                     <div style="text-align: center; color: #666; padding: 20px;">
                         🇵🇰 Welcome to Grastavia! 🇵🇰<br><br>
-                        I can tell you about:<br>
-                        🏔️ Tourist destinations<br>
-                        🍛 Local Pakistani food<br>
-                        📅 Best travel times<br>
-                        🎭 Cultural tips<br><br>
-                        <strong>Try asking me:</strong><br>
-                        "What's in Hunza?"<br>
-                        "Food in Lahore"<br>
-                        "Best time for Swat"
+                        I can help you plan your perfect trip!<br><br>
+                        💰 **Tell me your budget** (e.g., "budget 50,000 PKR")<br>
+                        👥 **Tell me group size** (e.g., "2 people")<br>
+                        🎯 **Tell me your preference** (e.g., "mountains", "beach", "culture")<br>
+                        ⏱️ **Tell me duration** (e.g., "3 days")<br><br>
+                        <strong>Try these examples:</strong><br>
+                        • "Recommend a place for 30,000 PKR"<br>
+                        • "Best mountain destination for family"<br>
+                        • "Budget trip for 5 days"<br>
+                        • "Cheap places near Islamabad"
                     </div>
                 </div>
                 <div style="padding: 15px; background: white; border-top: 1px solid #dee2e6;">
@@ -48,7 +49,6 @@ function createAIChatWidget() {
     
     document.body.insertAdjacentHTML('beforeend', widgetHTML);
     
-    // Add event listeners
     document.getElementById('chat-toggle-btn').addEventListener('click', toggleChat);
     document.getElementById('close-chat').addEventListener('click', toggleChat);
     document.getElementById('send-message').addEventListener('click', sendMessage);
@@ -66,7 +66,14 @@ function toggleChat() {
     }
 }
 
-// Main AI response function - NO API KEY NEEDED!
+// Store user preferences for smarter recommendations
+let userPreferences = {
+    budget: null,
+    groupSize: null,
+    preference: null,
+    duration: null
+};
+
 async function sendMessage() {
     const input = document.getElementById('chat-input');
     const message = input.value.trim();
@@ -76,113 +83,160 @@ async function sendMessage() {
     addMessageToChat('user', message);
     addTypingIndicator();
     
-    // Simulate AI thinking (0.5 second delay for realism)
     setTimeout(() => {
         removeTypingIndicator();
+        extractPreferences(message);
         const aiResponse = getAIResponse(message);
         addMessageToChat('ai', aiResponse);
         saveChatHistory(message, aiResponse);
     }, 500);
 }
 
-// The AI brain - all knowledge about Pakistan tourism
+// Extract budget, group size, preferences from user message
+function extractPreferences(message) {
+    const msg = message.toLowerCase();
+    
+    const budgetMatch = msg.match(/(\d+[\s]*(?:k|thousand|lakh)?)[\s]*(?:pkr|rupees?|rs|budget)/i) ||
+                        msg.match(/budget[\s]*[:\s]*(\d+)/i) ||
+                        msg.match(/(\d+)[\s]*(?:k|thousand)/i);
+    
+    if (budgetMatch) {
+        let budgetValue = budgetMatch[1].toString();
+        if (budgetValue.includes('k')) {
+            userPreferences.budget = parseInt(budgetValue) * 1000;
+        } else if (budgetValue.includes('lakh')) {
+            userPreferences.budget = parseInt(budgetValue) * 100000;
+        } else {
+            userPreferences.budget = parseInt(budgetValue);
+        }
+    }
+    
+    const groupMatch = msg.match(/(\d+)[\s]*(?:person|people|pax|family|member)/i);
+    if (groupMatch) {
+        userPreferences.groupSize = parseInt(groupMatch[1]);
+    }
+    
+    if (msg.includes('mountain') || msg.includes('hill') || msg.includes('peak')) {
+        userPreferences.preference = 'mountains';
+    } else if (msg.includes('beach') || msg.includes('sea')) {
+        userPreferences.preference = 'beach';
+    } else if (msg.includes('culture') || msg.includes('history')) {
+        userPreferences.preference = 'culture';
+    } else if (msg.includes('adventure')) {
+        userPreferences.preference = 'adventure';
+    } else if (msg.includes('family') || msg.includes('kids')) {
+        userPreferences.preference = 'family';
+    }
+    
+    const durationMatch = msg.match(/(\d+)[\s]*(?:day|days|night|week)/i);
+    if (durationMatch) {
+        userPreferences.duration = parseInt(durationMatch[1]);
+    }
+}
+
+// Smart destination recommendation based on budget
+function getBudgetRecommendation(budget, groupSize, preference, duration) {
+    const perPersonBudget = groupSize ? budget / groupSize : budget;
+    const dailyBudget = duration ? perPersonBudget / duration : perPersonBudget;
+    
+    if (perPersonBudget <= 15000) {
+        if (preference === 'mountains') {
+            return "🏔️ **Budget Mountain Getaway (Under 15,000 PKR)**\n\n📍 **Recommended:** Nathia Gali, Murree, or Ayubia\n\n💰 **Estimated Cost:** 10,000-15,000 PKR per person\n\n✨ **Includes:** Bus transport, budget hotel, local food\n\n🎯 **Must-do:** Chairlift at Murree, hiking trails";
+        } else if (preference === 'culture') {
+            return "🏛️ **Budget Cultural Tour (Under 15,000 PKR)**\n\n📍 **Recommended:** Lahore or Rawalpindi\n\n💰 **Estimated Cost:** 12,000-15,000 PKR per person\n\n🎯 **Must-see:** Badshahi Mosque (free), Lahore Fort, Anarkali Bazaar";
+        } else {
+            return "💰 **Best Budget Destinations (Under 15,000 PKR)**\n\n📍 **Top picks:**\n1. Murree - 10,000-12,000 PKR\n2. Nathia Gali - 12,000-15,000 PKR\n3. Lahore - 10,000-15,000 PKR\n4. Islamabad - 12,000-15,000 PKR";
+        }
+    } else if (perPersonBudget <= 40000) {
+        if (preference === 'mountains') {
+            return "🏔️ **Mid-Range Mountain Escape (15,000-40,000 PKR)**\n\n📍 **Recommended:** Swat Valley or Naran Kaghan\n\n💰 **Estimated Cost:** 25,000-35,000 PKR per person\n\n🎯 **Highlights:** Malam Jabba chairlift, Lake Saif-ul-Mulook";
+        } else if (preference === 'beach') {
+            return "🌊 **Mid-Range Beach Getaway (15,000-40,000 PKR)**\n\n📍 **Recommended:** Karachi or Gwadar\n\n💰 **Estimated Cost:** 25,000-35,000 PKR per person\n\n🎯 **Highlights:** Clifton Beach, Port Grand, Hammerhead";
+        } else {
+            return "💰 **Best Mid-Range Destinations (15,000-40,000 PKR)**\n\n📍 **Top picks:**\n1. Swat Valley - 25,000-35,000 PKR\n2. Naran Kaghan - 20,000-30,000 PKR\n3. Lahore + Multan - 30,000-40,000 PKR";
+        }
+    } else if (perPersonBudget <= 80000) {
+        if (preference === 'mountains') {
+            return "🏔️ **Premium Mountain Adventure (40,000-80,000 PKR)**\n\n📍 **Recommended:** Hunza Valley or Skardu\n\n💰 **Estimated Cost:** 60,000-75,000 PKR per person\n\n🎯 **Experiences:** Attabad Lake boat, Baltit Fort, Shangrila Lake";
+        } else if (preference === 'adventure') {
+            return "⛰️ **Adventure Package (40,000-80,000 PKR)**\n\n📍 **Recommended:** Fairy Meadows or Ratti Gali Lake\n\n💰 **Estimated Cost:** 50,000-70,000 PKR per person\n\n🎯 **Adventure:** Trek to Nanga Parbat base camp, alpine lake trekking";
+        } else {
+            return "💰 **Best Comfortable Destinations (40,000-80,000 PKR)**\n\n📍 **Top picks:**\n1. Hunza Valley - 60,000-75,000 PKR\n2. Skardu - 65,000-80,000 PKR\n3. Fairy Meadows - 50,000-60,000 PKR";
+        }
+    } else {
+        return "✨ **Luxury Pakistan Tour (80,000+ PKR)**\n\n📍 **Ultimate experience:** Multi-city luxury tour\n\n💰 **Estimated Cost:** 120,000-200,000 PKR per person\n\n🏰 **Includes:** Business class flights, 5-star hotels, private car, personal guide\n\n🏨 **Recommended:** Serena Hotels, Faletti's, Marriott";
+    }
+}
+
+// Main AI response function
 function getAIResponse(question) {
     const q = question.toLowerCase();
     
-    // Destination questions
+    // Budget-based recommendations
+    if ((q.includes('recommend') || q.includes('suggest') || q.includes('best place') || q.includes('where should i go')) &&
+        (q.includes('budget') || q.includes('pkr') || q.includes('rupees') || q.includes('rs') || q.includes('cost'))) {
+        
+        if (userPreferences.budget) {
+            return getBudgetRecommendation(
+                userPreferences.budget, 
+                userPreferences.groupSize, 
+                userPreferences.preference,
+                userPreferences.duration
+            );
+        } else {
+            return "💰 **Tell me your budget first!** 💰\n\nPlease share your budget (e.g., \"50,000 PKR\"), group size, and preference.\n\n**Example:** \"Recommend a place for 40,000 PKR for 2 people for 4 days in mountains\"";
+        }
+    }
+    
+    // Cheap/Budget destinations
+    if (q.includes('cheap') || q.includes('budget friendly') || q.includes('affordable')) {
+        return "💰 **Budget-Friendly Destinations in Pakistan** 💰\n\n📍 **Under 15,000 PKR per person:**\n\n1. Murree (10,000-12,000 PKR)\n2. Nathia Gali (12,000-15,000 PKR)\n3. Lahore (10,000-15,000 PKR)\n4. Islamabad (12,000-15,000 PKR)\n\n**Tell me your exact budget for personalized recommendations!**";
+    }
+    
+    // Family travel
+    if (q.includes('family') || q.includes('kids')) {
+        return "👨‍👩‍👧‍👦 **Family-Friendly Destinations** 👨‍👩‍👧‍👦\n\n📍 **Top picks:**\n1. Murree/Nathia Gali (15,000-25,000 PKR/family)\n2. Lahore (20,000-30,000 PKR/family)\n3. Swat Valley (30,000-50,000 PKR/family)\n\n**How many family members and budget?**";
+    }
+    
+    // Solo travel
+    if (q.includes('solo') || q.includes('alone')) {
+        return "🚶 **Solo Travel Destinations** 🚶\n\n📍 **Best for solo:**\n1. Hunza Valley (25,000-35,000 PKR) - Safe, friendly\n2. Lahore (12,000-20,000 PKR) - Vibrant culture\n3. Islamabad (15,000-20,000 PKR) - Very safe\n\n**What's your budget?**";
+    }
+    
+    // Weekend trips
+    if (q.includes('weekend') || (q.includes('2 days') || q.includes('3 days'))) {
+        return "🏃 **Weekend Getaways (2-3 days)** 🏃\n\n📍 **From Islamabad:** Murree (8,000-12,000 PKR)\n📍 **From Lahore:** Islamabad (10,000-15,000 PKR)\n📍 **From Karachi:** Hawksbay (5,000-8,000 PKR)\n\n**Which city are you traveling from?**";
+    }
+    
+    // Destination-specific queries
     if (q.includes('hunza') || q.includes('hunza valley')) {
-        return "🏔️ **Hunza Valley** is amazing from April to October!\n\n✨ **Must-see:**\n• Attabad Lake (turquoise water)\n• Baltit Fort (700 years old)\n• Passu Cones (iconic peaks)\n• Eagle's Nest (sunset view)\n\n🍑 **Don't miss:** Local apricots, walnut cake, and rakhat (dried fruit rolls)!\n\n🎯 **Best months:** May-June (cherry blossoms) or September-October (autumn colors)";
+        return "🏔️ **Hunza Valley**\n\n✨ **Must-see:** Attabad Lake, Baltit Fort, Passu Cones, Eagle's Nest\n\n📅 **Best time:** May-June or September-October\n\n💰 **Budget:** 25,000-80,000 PKR depending on style";
     }
     
-    if (q.includes('swat') || q.includes('swat valley') || q.includes('malam jabba')) {
-        return "⛰️ **Swat Valley** – the 'Switzerland of Pakistan'!\n\n✨ **Top attractions:**\n• Malam Jabba (ski resort)\n• Mahodand Lake (boating)\n• Mingora (main city)\n• Fizagat Park\n\n🍽️ **Must eat:** Trout fish, chapli kebab, fresh apples\n\n📅 **Best time:** May-September (pleasant weather, green valleys)";
+    if (q.includes('swat') || q.includes('swat valley')) {
+        return "⛰️ **Swat Valley**\n\n✨ **Top attractions:** Malam Jabba, Mahodand Lake, Mingora\n\n📅 **Best time:** May-September\n\n💰 **Budget:** 20,000-50,000 PKR per person";
     }
     
-    if (q.includes('naran') || q.includes('kaghan') || q.includes('saif') || q.includes('saif ul muluk')) {
-        return "🏞️ **Naran Kaghan Valley** – a summer paradise!\n\n✨ **Attractions:**\n• Lake Saif-ul-Mulook (fairy tale lake)\n• River Kunhar (trout fishing)\n• Shogran (beautiful meadows)\n\n📅 **Best time:** June-September\n🎯 **Entry point:** Accessible from Islamabad (8-10 hours drive)";
-    }
-    
-    if (q.includes('skardu') || q.includes('baltistan')) {
-        return "🏔️ **Skardu** – gateway to the world's highest peaks!\n\n✨ **Must-visit:**\n• Shangrila Lake (Lower Kachura)\n• Cold Desert (unique!)\n• Satpara Lake\n• Katpana Desert\n\n🥨 **Local food:** Apricots, buckwheat bread (thukpa), butter tea\n\n📅 **Best:** May-October (pleasant weather)";
-    }
-    
-    // City questions
     if (q.includes('lahore')) {
-        return "🍛 **LAHORE** – Pakistan's cultural and food capital!\n\n🍢 **Must-eat food:**\n• Nihari at Anarkali\n• Butter Chicken at Food Street\n• Falooda in Gawalmandi\n• Seekh kebabs\n\n🏛️ **Places to visit:**\n• Badshahi Mosque\n• Lahore Fort\n• Food Street (MM Alam Road)\n• Liberty Market\n\n🎯 **Best time:** November-March (pleasant weather)";
+        return "🍛 **Lahore**\n\n✨ **Must-see:** Badshahi Mosque, Lahore Fort, Food Street\n\n🍢 **Must-eat:** Nihari, Butter Chicken, Falooda\n\n💰 **Budget:** 10,000-30,000 PKR for 3 days";
     }
     
     if (q.includes('karachi')) {
-        return "🌊 **KARACHI** – city of lights and beaches!\n\n🍛 **Famous food:**\n• Biryani from Burns Road\n• Haleem and Nihari\n• Street chai and parathas\n\n🏖️ **Attractions:**\n• Clifton Beach\n• Quaid's Mausoleum\n• Port Grand (nightlife)\n• TDF Ghar (cafe with view)\n\n📅 **Best time:** November-February (avoid summer heat)";
+        return "🌊 **Karachi**\n\n✨ **Attractions:** Clifton Beach, Quaid's Mausoleum, Port Grand\n\n🍛 **Famous food:** Biryani, Haleem, Nihari\n\n💰 **Budget:** 15,000-35,000 PKR for 3-4 days";
     }
     
-    if (q.includes('islamabad')) {
-        return "🌳 **ISLAMABAD** – the beautiful capital city!\n\n✨ **Top spots:**\n• Faisal Mosque (iconic!)\n• Pakistan Monument\n• Daman-e-Koh (city view)\n• Rawal Lake (boating)\n• Trail 5 (hiking)\n\n🍽️ **Food spots:**\n• Monal Restaurant (mountain view)\n• Saidpur Village (traditional)\n\n📅 **Best time:** October-April (cool weather)";
+    // Price comparison
+    if (q.includes('compare') || (q.includes('cheaper') || q.includes('expensive'))) {
+        return "💰 **Destination Cost Comparison** 💰\n\n🟢 **Cheap (10,000-20,000 PKR):** Murree, Nathia Gali, Islamabad\n\n🟡 **Mid-range (25,000-40,000 PKR):** Swat, Naran, Lahore\n\n🔴 **Premium (50,000-80,000 PKR):** Hunza, Skardu\n\n**Want detailed breakdown for any destination?**";
     }
     
-    if (q.includes('peshawar')) {
-        return "🏛️ **PESHAWAR** – gateway to Khyber Pass!\n\n✨ **Attractions:**\n• Peshawar Fort (Bala Hissar)\n• Khyber Pass (historic)\n• Mahabat Khan Mosque\n\n🍢 **Must eat:**\n• Chapli kebab (original!)\n• Mutton karahi\n• Kawa (green tea)\n\n🎯 **Best:** October-March (pleasant weather)";
+    // Help / welcome
+    if (q.includes('hello') || q.includes('hi') || q.includes('assalam')) {
+        return "🇵🇰 Assalam-o-Alaikum! Welcome to Grastavia! 🇵🇰\n\nI can help you with:\n💰 Budget recommendations\n🏔️ Destination guides\n👨‍👩‍👧‍👦 Family/Solo trips\n🍛 Food recommendations\n\n**Try:** \"Recommend a place for 30,000 PKR\" or \"Best family destination\"";
     }
     
-    if (q.includes('multan')) {
-        return "🏺 **MULTAN** – city of saints and blue pottery!\n\n✨ **Visit:**\n• Shah Rukn-e-Alam Shrine\n• Multan Fort\n• Blue pottery workshops\n\n🍨 **Famous food:**\n• Sohan halwa (sweet)\n• Multani mangoes (summer)\n\n📅 **Best:** November-February (avoid May-June heat)";
-    }
-    
-    if (q.includes('gilgit')) {
-        return "🏔️ **GILGIT** – heart of mountain adventure!\n\n✨ **Attractions:**\n• Kargah Buddha (carved in rock)\n• Gilgit River\n• Naltar Valley (colored lakes)\n• Karakoram Highway views\n\n🎯 **Best time:** May-October\n🍎 **Specialty:** Fresh apples, apricots, and walnuts";
-    }
-    
-    // Food questions
-    if (q.includes('biryani')) {
-        return "🍛 **BIRYANI** – Pakistan's most loved rice dish!\n\n📍 **Best cities:**\n• Karachi (Sindhi biryani – spicy)\n• Lahore (Punjabi biryani – mild)\n\n🥘 **What's in it:** Basmati rice, chicken/mutton, spices, potatoes (sometimes), fried onions, and raita on side!\n\n🔥 **Pro tip:** Ask for 'extra masala' if you like spicy!";
-    }
-    
-    if (q.includes('nihari')) {
-        return "🍖 **NIHARI** – slow-cooked meat curry, a breakfast/lunch tradition!\n\n📍 **Where to try:**\n• Lahore: Haveli, Anarkali\n• Karachi: Burns Road, Javed Nihari\n\n🥩 **What to order:** Nalli Nihari (with bone marrow) – it's the best!\n\n🍞 **Eat with:** Fresh naan bread, topped with ginger, green chilies, and lemon.";
-    }
-    
-    if (q.includes('karahi')) {
-        return "🍗 **CHICKEN KARAHI** – cooked in a wok, Pakistan's favorite!\n\n📍 **Best cities:**\n• Peshawar (original style)\n• Lahore (butter karahi)\n• Islamabad (many good restaurants)\n\n🔥 **Style choices:**\n• Peshawari: Simple, no tomatoes\n• Lahori: Rich, with tomatoes and butter\n\n🍞 **Pair with:** Garlic naan and raita";
-    }
-    
-    if (q.includes('chapli') || q.includes('kebab')) {
-        return "🍔 **CHAPLI KEBAB** – spicy flattened meat patties from Khyber Pakhtunkhwa!\n\n📍 **Best places:**\n• Peshawar (original!\n• Swat\n• Islamabad\n\n🌶️ **Ingredients:** Ground beef + pomegranate seeds + coriander + chili + special spices\n\n🔥 **Pro tip:** Eat fresh from tawa (griddle) with naan and mint chutney!";
-    }
-    
-    if (q.includes('falooda')) {
-        return "🍨 **FALOODA** – Pakistan's favorite dessert drink!\n\n📍 **Famous in:**\n• Lahore (Gawalmandi)\n• Karachi\n• Islamabad\n\n🥤 **What's inside:**\n• Rose syrup (pink color)\n• Vermicelli noodles\n• Basil seeds\n• Ice cream\n• Milk\n• Nuts\n\n🎯 **Best time:** Summer – it's super refreshing!";
-    }
-    
-    if (q.includes('halwa') || (q.includes('sohan') && q.includes('halwa'))) {
-        return "🍬 **SOHAN HALWA** – Multan's famous sweet treat!\n\n📍 **Only in Multan** – this is the original!\n\n🥜 **What's inside:**\n• Semolina\n• Ghee\n• Sugar\n• Almonds & pistachios\n• Cardamom\n\n🎁 **Buy as gift:** It's the perfect souvenir from Multan!\n\n📅 **Best time:** Winter (it's warming)";
-    }
-    
-    // Travel time questions
-    if ((q.includes('best') || q.includes('time') || q.includes('season') || q.includes('month')) && 
-        (q.includes('visit') || q.includes('go') || q.includes('travel'))) {
-        return "📅 **Best travel seasons in Pakistan:**\n\n🏔️ **Northern areas** (Hunza, Swat, Naran): May-October\n🌆 **Punjab & Lahore:** November-March (avoid summer heat)\n🌊 **Sindh & Karachi:** November-February\n🏛️ **KPK & Peshawar:** October-April\n\n🎯 **Most popular:** September-October (autumn colors in north)\n🌸 **Spring special:** March-April (cherry blossoms in Hunza!)";
-    }
-    
-    // Cultural tips
-    if (q.includes('culture') || q.includes('tips') || q.includes('etiquette')) {
-        return "🎭 **Cultural tips for Pakistan:**\n\n🙏 **Greeting:** 'Assalam-o-Alaikum' (peace be upon you)\n\n👕 **Dress:** Modest clothing – cover shoulders/knees\n\n👟 **Mosques:** Remove shoes before entering\n\n🍛 **Eating:** Use right hand for eating\n\n💵 **Tipping:** 10-15% in restaurants\n\n📸 **Photos:** Always ask permission first\n\n🤝 **Hospitality:** You'll be treated like family!";
-    }
-    
-    // Weather
-    if (q.includes('weather') || q.includes('climate')) {
-        return "🌤️ **Pakistan's weather by region:**\n\n🏔️ **North** (Hunza, Swat): Summer 15-25°C, Winter below 0°C\n🌆 **Punjab** (Lahore): Summer 30-45°C, Winter 5-20°C\n🌊 **South** (Karachi): Summer 30-40°C, Winter 15-25°C\n\n📅 **Summer:** May-September (hot except north)\n❄️ **Winter:** November-February (cold in north)\n🌸 **Spring/Fall:** March-April & October-November (best time!)";
-    }
-    
-    // General welcome / help
-    if (q.includes('hello') || q.includes('hi') || q.includes('hey') || q.includes('assalam')) {
-        return "🇵🇰 Assalam-o-Alaikum! Welcome to Grastavia! 🇵🇰\n\nI'm your AI travel guide for Pakistan. Ask me about:\n\n🏔️ **Destinations:** Hunza, Swat, Naran, Skardu, Lahore, Karachi, Islamabad\n🍛 **Food:** Biryani, Nihari, Karahi, Chapli kebab, Falooda\n📅 **Best times to visit** (summer/winter)\n🎭 **Cultural tips**\n✈️ **Travel advice**\n\nWhat would you like to know?";
-    }
-    
-    if (q.includes('help') || q.includes('what can you')) {
-        return "🆘 **I can help you with:**\n\n1️⃣ **Destinations** – Hunza, Swat, Naran, Skardu\n2️⃣ **Cities** – Lahore, Karachi, Islamabad, Peshawar\n3️⃣ **Food** – Famous dishes and where to try them\n4️⃣ **Travel seasons** – Best months to visit\n5️⃣ **Cultural tips** – Do's and don'ts\n\nJust ask me anything about Pakistan travel! 🗺️";
-    }
-    
-    // Default response for anything else
-    return "🇵🇰 Thanks for your interest in Pakistan! 🇵🇰\n\nI'm still learning, but I know about:\n\n📍 **Destinations:** Hunza, Swat, Naran, Skardu\n🌆 **Cities:** Lahore, Karachi, Islamabad, Peshawar\n🍛 **Food:** Biryani, Nihari, Karahi, Chapli kebab\n📅 **Best travel times**\n\nCould you rephrase your question about Pakistan tourism? Try asking:\n• 'Tell me about Hunza Valley'\n• 'What food is famous in Lahore?'\n• 'Best time to visit Swat'\n\nI'm here to help! 🗺️";
+    // Default response
+    return "🇵🇰 Thanks for your interest in Pakistan! 🇵🇰\n\nTry asking:\n• 'Recommend a place for 40,000 PKR for 2 people'\n• 'Best family destination'\n• 'Cheapest places to visit'\n• 'Compare cost of Hunza vs Swat'\n\nI'm here to help plan your perfect trip! 🗺️";
 }
 
 // UI helper functions
@@ -203,7 +257,6 @@ function addMessageToChat(type, text) {
     bubble.style.whiteSpace = 'pre-wrap';
     bubble.style.wordWrap = 'break-word';
     
-    // Convert markdown-style bold to HTML
     bubble.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     
     messageDiv.appendChild(bubble);
